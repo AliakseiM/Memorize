@@ -9,9 +9,30 @@ import SwiftUI
 
 struct ContentView: View {
     @ObservedObject var viewModel: EmojiMemoryGame
-  
+    
+    let colorRed = (name: "Red", value: Color.red)
+    let colorGray = (name: "Gray", value: Color.gray)
+    let colorMint = (name: "Mint", value: Color(hue: 0.496, saturation: 1.0, brightness: 0.855))
+    
+    @State var cardColor: Color = .gray
+    
     var body: some View {
         VStack {
+            HStack(alignment: .top) {
+                Image(systemName: "plus.circle").onTapGesture {
+                    viewModel.incrementPairs()
+                }
+                Image(systemName: "minus.circle").onTapGesture {
+                    viewModel.decrementPairs()
+                }
+                Spacer()
+                Button(colorRed.name, action: { cardColor = colorRed.value }).foregroundColor(colorRed.value)
+                Button(colorGray.name, action: { cardColor = colorGray.value }).foregroundColor(colorGray.value)
+                Button(colorMint.name, action: { cardColor = colorMint.value }).foregroundColor(colorMint.value)
+                Spacer()
+                Button("Reset", action: viewModel.reset)
+            }.padding(.leading, 5.0).padding(.trailing, 10.0).font(.title2)
+            
             ScrollView(showsIndicators: false) {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 65))]) {
                     ForEach(viewModel.cards) { card in
@@ -23,7 +44,7 @@ struct ContentView: View {
                     }
                 }
             }
-            .foregroundColor(.red)
+            .foregroundColor(cardColor)
         }
         .padding(.horizontal)
     }
