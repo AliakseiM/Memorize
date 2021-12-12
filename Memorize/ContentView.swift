@@ -18,31 +18,43 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
-            HStack(alignment: .top) {
-                Image(systemName: "plus.circle").onTapGesture {
-                    viewModel.incrementPairs()
+            VStack() {
+                HStack() {
+                    Button(colorRed.name, action: { cardColor = colorRed.value }).foregroundColor(colorRed.value)
+                    Button(colorGray.name, action: { cardColor = colorGray.value }).foregroundColor(colorGray.value)
+                    Button(colorMint.name, action: { cardColor = colorMint.value }).foregroundColor(colorMint.value)
+                    
+                    Spacer()
+                    Text("Taps:")
+                    Text("\(viewModel.tap)")
+                        
                 }
-                Image(systemName: "minus.circle").onTapGesture {
-                    viewModel.decrementPairs()
+                HStack() {
+                    Image(systemName: "plus.circle").onTapGesture {
+                        viewModel.incrementPairs()
+                    }
+                    Image(systemName: "minus.circle").onTapGesture {
+                        viewModel.decrementPairs()
+                    }
+                    Spacer()
+                    Button("Reset", action: viewModel.reset)
                 }
-                Spacer()
-                Button(colorRed.name, action: { cardColor = colorRed.value }).foregroundColor(colorRed.value)
-                Button(colorGray.name, action: { cardColor = colorGray.value }).foregroundColor(colorGray.value)
-                Button(colorMint.name, action: { cardColor = colorMint.value }).foregroundColor(colorMint.value)
-                Spacer()
-                Button("Reset", action: viewModel.reset)
             }.padding(.leading, 5.0).padding(.trailing, 10.0).font(.title2)
             
             ScrollView(showsIndicators: false) {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 65))]) {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 70))]) {
                     ForEach(viewModel.cards) { card in
                         CardView(card: card)
-                            .aspectRatio(2/3, contentMode: .fit)
+                            .aspectRatio(1/1, contentMode: .fit)
                             .onTapGesture {
                                 viewModel.choose(card)
+                                viewModel.addTap()
                             }
                     }
                 }
+            }
+            .onTapGesture {
+                viewModel.closeAll()
             }
             .foregroundColor(cardColor)
         }
@@ -56,7 +68,7 @@ struct CardView: View {
     
     var body: some View {
         ZStack {
-            let shape = RoundedRectangle(cornerRadius: 20.0)
+            let shape = RoundedRectangle(cornerRadius: 5.0)
             if card.isFaceUp {
                 shape.fill().foregroundColor(.white)
                 shape .strokeBorder(lineWidth: 3)

@@ -18,6 +18,8 @@ class EmojiMemoryGame: ObservableObject {
         }
     }
     
+    var tap = 0
+    
     @Published private var model: MemoryGame<String> = createMemoryGame()
     
     var cards: Array<MemoryGame<String>.Card> {
@@ -33,18 +35,27 @@ class EmojiMemoryGame: ObservableObject {
     func incrementPairs() {
         if EmojiMemoryGame.pairs < 24 {
             EmojiMemoryGame.pairs += 1
-            model = EmojiMemoryGame.createMemoryGame()
+            reset()
         }
     }
     
     func decrementPairs() {
         if EmojiMemoryGame.pairs > 2 {
             EmojiMemoryGame.pairs -= 1
-            model = EmojiMemoryGame.createMemoryGame()
+            reset()
         }
     }
     
     func reset() {
+        tap = 0
         model = EmojiMemoryGame.createMemoryGame()
+    }
+    
+    func addTap() {
+        tap += 1
+    }
+    
+    func closeAll() {
+        model.closeAll()
     }
 }

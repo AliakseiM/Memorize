@@ -34,6 +34,12 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
         }
     }
     
+    mutating func closeAll() {
+        for index in cards.indices {
+            cards[index].isFaceUp = false
+        }
+    }
+    
     init(numberOfPairsOfCards: Int, createCardContent: (Int) -> CardContent) {
         cards = Array<Card>()
         
